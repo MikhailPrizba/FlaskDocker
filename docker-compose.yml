@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  mongodb:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  api:
+    build: ./app
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_HOST: mongodb
+    command: ["entrypoint/main.sh"]
+
+volumes:
+  mongo-data:
